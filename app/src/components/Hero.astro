@@ -1,0 +1,251 @@
+---
+import SearchForm from "./SearchForm";
+import landingContent from "../data/landing-content.json";
+
+const { hero } = landingContent;
+---
+
+<header
+    class="relative min-h-screen flex items-center justify-center overflow-hidden"
+    id="hero-section"
+>
+    <!-- Static Fallback Image / Base Layer (Always visible underneath) -->
+    <div class="absolute inset-0 z-0 select-none">
+        <img
+            src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            alt="Indian Wedding Celebration"
+            class="w-full h-full object-cover opacity-80"
+        />
+        <div
+            class="hero-overlay absolute inset-0 bg-black/40 bg-gradient-to-b from-black/60 via-transparent to-black/60"
+        >
+        </div>
+    </div>
+
+    <!-- Video Backgrounds Container -->
+    <div class="absolute inset-0 z-0">
+        {
+            hero.videos.map(
+                (video, index) =>
+                    (video.type === "url" || !video.type) && (
+                        <div
+                            class="hero-video-container absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0"
+                            data-index={index}
+                        >
+                            <video
+                                autoplay
+                                muted
+                                playsinline
+                                preload="auto"
+                                class="w-full h-full object-cover"
+                            >
+                                <source src={video.data} type="video/mp4" />
+                            </video>
+                            <div class="hero-overlay absolute inset-0 bg-black/40 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
+                        </div>
+                    ),
+            )
+        }
+    </div>
+
+    <div class="relative z-10 text-center px-4 max-w-4xl w-full">
+        <!-- Programmable Text Container -->
+        <div
+            id="hero-text-container"
+            class="min-h-[200px] flex flex-col justify-center items-center"
+        >
+            {
+                hero.texts.map((text, index) => (
+                    <div
+                        class={`hero-text-group absolute w-full transition-all duration-700 ease-out ${index === 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}`}
+                        data-index={index}
+                    >
+                        <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow leading-tight">
+                            {text.bigText}
+                            <br />
+                            <span class="text-marigold-400">
+                                {text.bigTextYellow}
+                            </span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto font-light">
+                            {text.smallText}
+                        </p>
+                    </div>
+                ))
+            }
+        </div>
+
+        <!-- Search Form Mount Point -->
+        <div class="relative z-30 animate-fade-in-up delay-200">
+            <SearchForm client:load />
+        </div>
+
+        <div
+            class="mt-6 flex justify-center gap-6 text-white/90 text-sm animate-fade-in-up delay-300 relative z-20"
+        >
+            <span class="flex items-center gap-2">
+                <i class="fas fa-check-circle text-marigold-400"></i> Verified Vendors
+            </span>
+            <span class="flex items-center gap-2">
+                <i class="fas fa-check-circle text-marigold-400"></i> Best Price Guarantee
+            </span>
+        </div>
+    </div>
+</header>
+
+<script>
+    const videoContainers = document.querySelectorAll(".hero-video-container");
+    const videos = Array.from(videoContainers).map((container) =>
+        container.querySelector("video"),
+    );
+    let currentVideoIndex = -1; // Start with fallback visible
+
+    // Helper to safely play video
+    const playVideoToCheck = async (videoEl) => {
+        try {
+            await videoEl.play();
+            return true;
+        } catch (e) {
+            console.warn("Video failed to play:", videoEl.src, e);
+            return false;
+        }
+    };
+
+    const switchVideo = async () => {
+        let nextIndex = (currentVideoIndex + 1) % videoContainers.length;
+        let attempts = 0;
+        let foundPlayable = false;
+
+        // Try to find the next playable video
+        while (attempts < videos.length && !foundPlayable) {
+            const nextContainer = videoContainers[nextIndex];
+            const nextVideo = videos[nextIndex];
+
+            // Reset time to 0 to ensure loop starts from beginning
+            nextVideo.currentTime = 0;
+
+            const isPlaying = await playVideoToCheck(nextVideo);
+
+            if (isPlaying) {
+                // If we found a playable video, switch to it
+                if (currentVideoIndex >= 0) {
+                    // Hide current video
+                    const currentContainer = videoContainers[currentVideoIndex];
+                    currentContainer.classList.remove("opacity-100");
+                    currentContainer.classList.add("opacity-0");
+
+                    // Pause old video after transition to save resources
+                    const oldVideo = videos[currentVideoIndex];
+                    setTimeout(() => {
+                        oldVideo.pause();
+                    }, 1000);
+                }
+
+                // Show new video
+                nextContainer.classList.remove("opacity-0");
+                nextContainer.classList.add("opacity-100");
+
+                currentVideoIndex = nextIndex;
+                foundPlayable = true;
+            } else {
+                // If failed, try next one immediately
+                nextIndex = (nextIndex + 1) % videoContainers.length;
+                attempts++;
+            }
+        }
+
+        // If no videos play, we just stay on fallback (currentVideoIndex remains -1 or whatever last worked)
+    };
+
+    // Initialize Video Loop
+    if (videos.length > 0) {
+        // Setup all videos to trigger switch on end
+        videos.forEach((video, idx) => {
+            video.removeAttribute("loop");
+            video.addEventListener("ended", switchVideo);
+            video.addEventListener("error", (e) => {
+                console.error("Video error during playback:", e);
+                // If the error happens on the current video, force switch
+                if (idx === currentVideoIndex) {
+                    switchVideo();
+                }
+            });
+        });
+
+        // Start the loop
+        switchVideo();
+    }
+
+    // --- Text Animation Logic ---
+    const textGroups = document.querySelectorAll(".hero-text-group");
+    let currentTextIndex = 0;
+    const TEXT_DURATION = 8000; // Time reading the text (reduced a bit for testing, user said 10-15s gap)
+    const FADE_DURATION = 700; // match CSS duration
+
+    const switchText = () => {
+        // 1. Fade OUT current
+        const currentGroup = textGroups[currentTextIndex];
+        currentGroup.classList.remove("opacity-100", "translate-y-0");
+        currentGroup.classList.add(
+            "opacity-0",
+            "translate-y-8",
+            "pointer-events-none",
+        );
+
+        // 2. Wait for fade out to complete before showing next (Gap)
+        setTimeout(() => {
+            const nextIndex = (currentTextIndex + 1) % textGroups.length;
+            const nextGroup = textGroups[nextIndex];
+
+            // 3. Fade IN next
+            nextGroup.classList.remove(
+                "opacity-0",
+                "translate-y-8",
+                "pointer-events-none",
+            );
+            nextGroup.classList.add("opacity-100", "translate-y-0");
+
+            currentTextIndex = nextIndex;
+        }, FADE_DURATION + 200); // Wait slightly longer than transition to ensure clean empty state
+    };
+
+    if (textGroups.length > 1) {
+        // We use a timeout loop instead of interval to account for the gap time
+        const scheduleNextText = () => {
+            setTimeout(
+                () => {
+                    switchText();
+                    scheduleNextText();
+                },
+                TEXT_DURATION + FADE_DURATION + 200,
+            );
+        };
+        scheduleNextText();
+    }
+</script>
+
+<style>
+    .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .delay-200 {
+        animation-delay: 0.2s;
+    }
+    .delay-300 {
+        animation-delay: 0.3s;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+</style>

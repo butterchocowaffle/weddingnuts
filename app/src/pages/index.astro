@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar";
+import landingContent from "../data/landing-content.json";
+import Logo from "../components/Logo.astro";
+import Hero from "../components/Hero.astro";
+import WhyUs from "../components/WhyUs.astro";
+import ServicesGrid from "../components/ServicesGrid.astro";
+import Testimonials from "../components/Testimonials.astro";
+import Footer from "../components/Footer.astro";
+
+const { logo } = landingContent;
+---
+
+<Layout title="WeddingNuts | Plan Your Grand Indian Wedding">
+    <Navbar client:load>
+        <div slot="logo">
+            {logo.type === "component" && <Logo />}
+            {
+                logo.type === "url" && (
+                    <img
+                        src={logo.data}
+                        alt="WeddingNuts Logo"
+                        class="w-10 h-10 object-contain"
+                    />
+                )
+            }
+        </div>
+    </Navbar>
+
+    <main>
+        <Hero />
+        <WhyUs />
+        <ServicesGrid />
+        <Testimonials />
+    </main>
+    <Footer />
+</Layout>

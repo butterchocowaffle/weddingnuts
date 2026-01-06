@@ -1,0 +1,67 @@
+{
+    "logo": {
+        "type": "component",
+        "data": "default"
+    },
+    "hero": {
+        "videos": [
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/4446328/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/11122340/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/7685293/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/2078587/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/3122106/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/4174213/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/4124198/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/8776123/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/8776998/"
+            },
+            {
+                "type": "url",
+                "data": "https://www.pexels.com/download/video/14299432/"
+            }
+        ],
+        "texts": [
+            {
+                "bigText": "The Grand Indian Wedding",
+                "bigTextYellow": "The Smartest Way to Plan It.",
+                "smallText": "From the Ghodi to the Vidai—find trusted local vendors that fit your style and your budget."
+            },
+            {
+                "bigText": "Your Dream Celebration",
+                "bigTextYellow": "Made Effortless.",
+                "smallText": "Connect with top-rated decorators, caterers, and photographers in your city."
+            },
+            {
+                "bigText": "Celebrate Love",
+                "bigTextYellow": "Without the Stress.",
+                "smallText": "Everything you need for your perfect day, all in one place."
+            }
+        ]
+    }
+}

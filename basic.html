@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeddingNuts | Plan Your Grand Indian Wedding</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Playfair Display (Headings) and Open Sans (Body) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Alpine.js for Interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        marigold: {
+                            400: '#FFB300',
+                            500: '#FF9800', // Primary Action
+                            600: '#F57C00',
+                        },
+                        royalPink: {
+                            500: '#E91E63', // Accents
+                            600: '#C2185B',
+                            900: '#880E4F',
+                        },
+                        champagne: '#F7E7CE',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Open Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for horizontal scrolling */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+        }
+
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 bg-gray-50 antialiased" x-data="{ mobileMenuOpen: false }">
+
+    <!-- Navigation -->
+    <nav class="absolute w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-3xl font-serif font-bold text-white tracking-wide">
+                        Wedding<span class="text-marigold-400">Nuts</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" class="text-white hover:text-marigold-400 transition font-medium">Venues</a>
+                    <a href="#" class="text-white hover:text-marigold-400 transition font-medium">Vendors</a>
+                    <a href="#" class="text-white hover:text-marigold-400 transition font-medium">Real Weddings</a>
+                    <a href="#" class="text-white hover:text-marigold-400 transition font-medium">Blog</a>
+                    <a href="#"
+                        class="bg-white/10 border border-white/30 hover:bg-white hover:text-royalPink-600 text-white px-4 py-2 rounded-full transition text-sm font-semibold">
+                        Are you a Vendor?
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen"
+                        class="text-white hover:text-marigold-400 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false"
+            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
+            class="md:hidden bg-white shadow-xl absolute w-full top-20 left-0 z-50">
+            <div class="px-4 pt-2 pb-4 space-y-1">
+                <a href="#"
+                    class="block px-3 py-2 text-gray-800 font-medium hover:bg-royalPink-50 hover:text-royalPink-600 rounded">Venues</a>
+                <a href="#"
+                    class="block px-3 py-2 text-gray-800 font-medium hover:bg-royalPink-50 hover:text-royalPink-600 rounded">Vendors</a>
+                <a href="#"
+                    class="block px-3 py-2 text-gray-800 font-medium hover:bg-royalPink-50 hover:text-royalPink-600 rounded">Real
+                    Weddings</a>
+                <a href="#" class="block px-3 py-2 text-royalPink-600 font-bold border-t mt-2 pt-2">Vendor Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        <!-- Video Background Placeholder -->
+        <div class="absolute inset-0 z-0">
+            <!-- Using a high quality Unsplash image as a fallback for the video loop -->
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                alt="Indian Wedding Celebration" class="w-full h-full object-cover">
+            <div class="hero-overlay absolute inset-0"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl w-full">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow leading-tight">
+                The Grand Indian Wedding.<br />
+                <span class="text-marigold-400">The Smartest Way to Plan It.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-100 mb-8 max-w-2xl mx-auto font-light">
+                From the <i>Ghodi</i> to the <i>Vidai</i>—find trusted local vendors that fit your style and your
+                budget.
+            </p>
+
+            <!-- Search Component -->
+            <div
+                class="bg-white p-4 rounded-xl shadow-2xl max-w-3xl mx-auto transform hover:-translate-y-1 transition duration-300">
+                <form class="flex flex-col md:flex-row gap-3">
+                    <!-- Service Input -->
+                    <div class="relative flex-grow group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 group-focus-within:text-marigold-500 transition"></i>
+                        </div>
+                        <select
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-marigold-500 focus:border-marigold-500 sm:text-sm appearance-none text-gray-700 font-medium">
+                            <option value="" disabled selected>I'm looking for...</option>
+                            <option value="venue">Wedding Venues / Lawns</option>
+                            <option value="catering">Catering & Food Stalls</option>
+                            <option value="tent">Tent & Decor</option>
+                            <option value="makeup">Bridal Makeup</option>
+                            <option value="photo">Photography & Video</option>
+                            <option value="ghodi">Ghodi & Band Baaja</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Location Input -->
+                    <div class="relative flex-grow group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i
+                                class="fas fa-map-marker-alt text-gray-400 group-focus-within:text-marigold-500 transition"></i>
+                        </div>
+                        <input type="text"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-marigold-500 focus:border-marigold-500 sm:text-sm"
+                            placeholder="City or Pin Code (e.g. Delhi, 110001)">
+                    </div>
+
+                    <!-- Button -->
+                    <button type="button"
+                        class="bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg transition duration-200 shadow-lg flex items-center justify-center gap-2">
+                        <span>Search</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="mt-6 flex justify-center gap-4 text-white/80 text-sm">
+                <span class="flex items-center gap-1"><i class="fas fa-check-circle text-marigold-400"></i> Verified
+                    Vendors</span>
+                <span class="flex items-center gap-1"><i class="fas fa-check-circle text-marigold-400"></i> Best Price
+                    Guarantee</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- WHY US SECTION -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">Why WeddingNuts?</h2>
+                <div class="w-24 h-1 bg-marigold-500 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <!-- Card 1 -->
+                <div
+                    class="p-6 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-100">
+                    <div
+                        class="w-16 h-16 bg-royalPink-100 text-royalPink-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Transparent Pricing</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        No hidden commissions. We connect you directly with vendors so you get the best 'local market'
+                        rates without the hassle.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div
+                    class="p-6 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-100">
+                    <div
+                        class="w-16 h-16 bg-marigold-100 text-marigold-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Verified Quality</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Every Tent-waala, Caterer, and Decorator is vetted by us. We ensure they deliver exactly what
+                        they promise for your big day.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div
+                    class="p-6 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-xl transition duration-300 border border-transparent hover:border-gray-100">
+                    <div
+                        class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Stress-Free Planning</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        You focus on the celebration; let our vendors handle the logistics. Professionalism of a planner
+                        at zero cost to you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES (Masonry Grid) -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-10">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900">Build Your Dream Team</h2>
+                    <p class="text-gray-600 mt-2">Everything you need for a grand celebration.</p>
+                </div>
+                <a href="#"
+                    class="hidden md:flex items-center text-royalPink-600 font-bold hover:text-royalPink-800 transition">
+                    View All Categories <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
+
+                <!-- Venues (Large Tile) -->
+                <div class="col-span-2 row-span-2 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1511285560982-1351cdeb9821?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                        alt="Wedding Venue">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
+                        <h3 class="text-white text-2xl font-serif font-bold">Venues & Lawns</h3>
+                        <p
+                            class="text-gray-300 text-sm mt-1 opacity-0 group-hover:opacity-100 transition duration-300 transform translate-y-2 group-hover:translate-y-0">
+                            From palaces to intimate gardens</p>
+                    </div>
+                </div>
+
+                <!-- Catering -->
+                <div
+                    class="col-span-2 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition duration-500 group-hover:scale-110" alt="Catering">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 flex flex-col justify-end">
+                        <h3 class="text-white text-xl font-bold">Catering</h3>
+                    </div>
+                </div>
+
+                <!-- Decor -->
+                <div
+                    class="col-span-1 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition duration-500 group-hover:scale-110" alt="Decor">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 flex flex-col justify-end">
+                        <h3 class="text-white text-xl font-bold">Decor</h3>
+                    </div>
+                </div>
+
+                <!-- Photography -->
+                <div
+                    class="col-span-1 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                        alt="Photography">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 flex flex-col justify-end">
+                        <h3 class="text-white text-xl font-bold">Photography</h3>
+                    </div>
+                </div>
+
+                <!-- Attire/Makeup -->
+                <div
+                    class="col-span-2 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition duration-500 group-hover:scale-110" alt="Makeup">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 flex flex-col justify-end">
+                        <h3 class="text-white text-xl font-bold">Makeup & Henna</h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-8 text-center md:hidden">
+                <a href="#"
+                    class="inline-flex items-center text-royalPink-600 font-bold hover:text-royalPink-800 transition">
+                    View All Categories <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF (YouTube Vibe) -->
+    <section class="py-16 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-royalPink-600 font-bold tracking-wider uppercase text-sm">Testimonials</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mt-2">Real Weddings, Real Stories
+                </h2>
+            </div>
+
+            <!-- Video Cards (Simulated) -->
+            <div class="flex overflow-x-auto gap-6 pb-8 hide-scroll snap-x">
+                <!-- Video 1 -->
+                <div
+                    class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-[9/16] group cursor-pointer snap-center">
+                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition" alt="Couple 1">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div
+                            class="w-14 h-14 bg-white/20 backdrop-blur rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition">
+                            <i class="fas fa-play text-white ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                        <p class="text-white font-bold text-lg">Aditya & Sneha's Royal Jaipur Wedding</p>
+                        <p class="text-gray-300 text-sm"><i class="fas fa-map-marker-alt text-marigold-500 mr-1"></i>
+                            Jaipur, Rajasthan</p>
+                    </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div
+                    class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-[9/16] group cursor-pointer snap-center">
+                    <img src="https://images.unsplash.com/photo-1621621667797-e06afc217fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition" alt="Couple 2">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div
+                            class="w-14 h-14 bg-white/20 backdrop-blur rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition">
+                            <i class="fas fa-play text-white ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                        <p class="text-white font-bold text-lg">Budget Decor Hacks We Loved!</p>
+                        <p class="text-gray-300 text-sm"><i class="fas fa-map-marker-alt text-marigold-500 mr-1"></i>
+                            Delhi NCR</p>
+                    </div>
+                </div>
+
+                <!-- Video 3 -->
+                <div
+                    class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-[9/16] group cursor-pointer snap-center">
+                    <img src="https://images.unsplash.com/photo-1605389669528-7634d0b43170?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition" alt="Couple 3">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div
+                            class="w-14 h-14 bg-white/20 backdrop-blur rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition">
+                            <i class="fas fa-play text-white ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                        <p class="text-white font-bold text-lg">Finding the Perfect Caterer</p>
+                        <p class="text-gray-300 text-sm"><i class="fas fa-map-marker-alt text-marigold-500 mr-1"></i>
+                            Mumbai</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Testimonials Scroller -->
+            <div class="mt-10 bg-champagne/30 p-8 rounded-2xl relative">
+                <i class="fas fa-quote-left text-4xl text-marigold-300 absolute top-4 left-4"></i>
+                <div class="text-center max-w-3xl mx-auto">
+                    <p class="text-xl text-gray-700 italic font-serif leading-relaxed">
+                        "We were so worried about hidden costs with caterers. WeddingNuts gave us 3 verified options in
+                        Delhi, and we saved almost 20% compared to other quotes. The food was amazing!"
+                    </p>
+                    <div class="mt-4 font-bold text-gray-900">— Rahul & Priya, Married Dec 2025</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / FOOTER TOP -->
+    <section class="bg-royalPink-900 py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-6">Ready to Plan the Perfect Wedding?
+            </h2>
+            <p class="text-royalPink-100 mb-8 text-lg">Join thousands of couples finding trusted vendors every day.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                    class="bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1">
+                    Find Vendors Now
+                </button>
+                <button
+                    class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-royalPink-900 transition transform hover:-translate-y-1">
+                    List Your Business
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-1">
+                <a href="#" class="text-2xl font-serif font-bold text-white tracking-wide">
+                    Wedding<span class="text-marigold-400">Nuts</span>
+                </a>
+                <p class="mt-4 text-sm">
+                    Making Indian weddings grander, simpler, and budget-friendly. The one-stop destination for all your
+                    wedding needs.
+                </p>
+                <div class="flex space-x-4 mt-6">
+                    <a href="#" class="text-gray-400 hover:text-marigold-400 transition"><i
+                            class="fab fa-instagram text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-red-500 transition"><i
+                            class="fab fa-youtube text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-blue-500 transition"><i
+                            class="fab fa-facebook text-xl"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Services</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition">Venues & Lawns</a></li>
+                    <li><a href="#" class="hover:text-white transition">Catering</a></li>
+                    <li><a href="#" class="hover:text-white transition">Photography</a></li>
+                    <li><a href="#" class="hover:text-white transition">Makeup Artists</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Company</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                    <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                    <li><a href="#" class="hover:text-white transition">Vendor Partner Program</a></li>
+                    <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Contact</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><i class="fas fa-envelope mr-2"></i> hello@weddingnuts.com</li>
+                    <li><i class="fas fa-phone mr-2"></i> +91 98765 43210</li>
+                    <li class="mt-4">
+                        <span class="block text-xs uppercase text-gray-500 mb-1">Parent Company</span>
+                        <span class="text-white font-bold">PCM Media</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-800 text-sm text-center">
+            &copy; 2025 WeddingNuts. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+
+</html>
