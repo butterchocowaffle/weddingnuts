@@ -52,13 +52,14 @@ const { hero } = landingContent;
         <!-- Programmable Text Container -->
         <div
             id="hero-text-container"
-            class="min-h-[200px] flex flex-col justify-center items-center"
+            class="min-h-[350px] flex flex-col justify-center items-center mt-32 mb-12"
         >
             {
                 hero.texts.map((text, index) => (
                     <div
-                        class={`hero-text-group absolute w-full transition-all duration-700 ease-out ${index === 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}`}
+                        class={`hero-text-group absolute w-full ${index === 0 ? "opacity-100 anim-fade-up" : "opacity-0 pointer-events-none"}`}
                         data-index={index}
+                        data-duration={text.duration}
                     >
                         <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow leading-tight">
                             {text.bigText}
@@ -99,19 +100,37 @@ const { hero } = landingContent;
         container.querySelector("video"),
     );
     let currentVideoIndex = -1; // Start with fallback visible
+    let isSwitching = false;
 
     // Helper to safely play video
     const playVideoToCheck = async (videoEl) => {
         try {
+            // Ensure video is ready enough
+            if (videoEl.readyState < 2) {
+                await new Promise((resolve) => {
+                    videoEl.oncanplay = resolve;
+                    // Timeout fallback
+                    setTimeout(resolve, 3000);
+                });
+            }
+
             await videoEl.play();
             return true;
         } catch (e) {
+            // Ignore AbortError which happens if we pause quickly or navigate away
+            if (e.name === "AbortError") {
+                // Even if aborted, check if it's actually playing (sometimes AbortError is false positive during rapid state changes)
+                return !videoEl.paused;
+            }
             console.warn("Video failed to play:", videoEl.src, e);
             return false;
         }
     };
 
     const switchVideo = async () => {
+        if (isSwitching) return;
+        isSwitching = true;
+
         let nextIndex = (currentVideoIndex + 1) % videoContainers.length;
         let attempts = 0;
         let foundPlayable = false;
@@ -148,11 +167,16 @@ const { hero } = landingContent;
                 currentVideoIndex = nextIndex;
                 foundPlayable = true;
             } else {
+                console.warn(
+                    `Skipping video ${nextIndex} due to playback failure.`,
+                );
                 // If failed, try next one immediately
                 nextIndex = (nextIndex + 1) % videoContainers.length;
                 attempts++;
             }
         }
+
+        isSwitching = false;
 
         // If no videos play, we just stay on fallback (currentVideoIndex remains -1 or whatever last worked)
     };
@@ -162,34 +186,55 @@ const { hero } = landingContent;
         // Setup all videos to trigger switch on end
         videos.forEach((video, idx) => {
             video.removeAttribute("loop");
-            video.addEventListener("ended", switchVideo);
-            video.addEventListener("error", (e) => {
-                console.error("Video error during playback:", e);
-                // If the error happens on the current video, force switch
-                if (idx === currentVideoIndex) {
+
+            // Use timeupdate to detect end more reliably than 'ended' if duration is weird
+            // But 'ended' is standard. Let's stick to ended but debounce it.
+            video.onended = () => {
+                // Only switch if this is the ACTIVE video
+                if (idx === currentVideoIndex && !isSwitching) {
                     switchVideo();
                 }
-            });
+            };
+
+            video.onerror = (e) => {
+                console.error("Video error during playback:", e);
+                // If the error happens on the current video, force switch
+                if (idx === currentVideoIndex && !isSwitching) {
+                    switchVideo();
+                }
+            };
         });
 
         // Start the loop
-        switchVideo();
+        setTimeout(switchVideo, 100); // Small delay to let initial hydration settle
     }
 
     // --- Text Animation Logic ---
+    // --- Text Animation Logic ---
     const textGroups = document.querySelectorAll(".hero-text-group");
     let currentTextIndex = 0;
-    const TEXT_DURATION = 8000; // Time reading the text (reduced a bit for testing, user said 10-15s gap)
-    const FADE_DURATION = 700; // match CSS duration
+    const FADE_DURATION = 800; // Match CSS
+    const animationClasses = [
+        "anim-fade-up",
+        "anim-zoom-in",
+        "anim-slide-right",
+        "anim-blur-in",
+        "anim-scale-reveal",
+    ];
+
+    let lastAnimIndex = -1;
 
     const switchText = () => {
         // 1. Fade OUT current
         const currentGroup = textGroups[currentTextIndex];
+
+        // Remove any existing animation classes to reset
+        currentGroup.classList.remove(...animationClasses);
+
         currentGroup.classList.remove("opacity-100", "translate-y-0");
         currentGroup.classList.add(
             "opacity-0",
-            "translate-y-8",
-            "pointer-events-none",
+            "pointer-events-none", // We don't need translate-y-8 because we have custom animations now
         );
 
         // 2. Wait for fade out to complete before showing next (Gap)
@@ -197,30 +242,46 @@ const { hero } = landingContent;
             const nextIndex = (currentTextIndex + 1) % textGroups.length;
             const nextGroup = textGroups[nextIndex];
 
-            // 3. Fade IN next
-            nextGroup.classList.remove(
-                "opacity-0",
-                "translate-y-8",
-                "pointer-events-none",
+            // Pick a random animation (different from last)
+            let animIndex;
+            do {
+                animIndex = Math.floor(Math.random() * animationClasses.length);
+            } while (
+                animIndex === lastAnimIndex &&
+                animationClasses.length > 1
             );
-            nextGroup.classList.add("opacity-100", "translate-y-0");
+            lastAnimIndex = animIndex;
+
+            const randomAnim = animationClasses[animIndex];
+
+            // 3. Fade IN next with random animation
+            nextGroup.classList.remove("opacity-0", "pointer-events-none");
+            // Reset base state
+            nextGroup.style.opacity = "";
+            nextGroup.style.transform = "";
+
+            // Apply animation
+            nextGroup.classList.add(randomAnim);
+            nextGroup.classList.add("opacity-100"); // Ensure it stays visible
 
             currentTextIndex = nextIndex;
-        }, FADE_DURATION + 200); // Wait slightly longer than transition to ensure clean empty state
+
+            // Schedule next switch based on THIS text's duration
+            const durationSec = parseInt(nextGroup.dataset.duration || "7");
+            scheduleNextText(durationSec * 1000);
+        }, FADE_DURATION); // Wait for exit
+    };
+
+    const scheduleNextText = (duration) => {
+        setTimeout(switchText, duration);
     };
 
     if (textGroups.length > 1) {
-        // We use a timeout loop instead of interval to account for the gap time
-        const scheduleNextText = () => {
-            setTimeout(
-                () => {
-                    switchText();
-                    scheduleNextText();
-                },
-                TEXT_DURATION + FADE_DURATION + 200,
-            );
-        };
-        scheduleNextText();
+        // Initial start
+        const firstDurationSec = parseInt(
+            textGroups[0].dataset.duration || "7",
+        );
+        scheduleNextText(firstDurationSec * 1000);
     }
 </script>
 
@@ -238,14 +299,85 @@ const { hero } = landingContent;
         animation-delay: 0.3s;
     }
 
+    .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Random Text Animations */
+    .anim-fade-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .anim-zoom-in {
+        animation: zoomIn 0.8s ease-out forwards;
+    }
+
+    .anim-slide-right {
+        animation: slideInRight 0.8s ease-out forwards;
+    }
+
+    .anim-blur-in {
+        animation: blurIn 0.8s ease-out forwards;
+    }
+
+    .anim-scale-reveal {
+        animation: scaleReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+            forwards;
+    }
+
+    /* Keyframes */
     @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
         to {
             opacity: 1;
             transform: translateY(0);
         }
     }
 
-    .text-shadow {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes blurIn {
+        from {
+            opacity: 0;
+            filter: blur(10px);
+        }
+        to {
+            opacity: 1;
+            filter: blur(0);
+        }
+    }
+
+    @keyframes scaleReveal {
+        from {
+            opacity: 0;
+            transform: scale(1.1);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 </style>
