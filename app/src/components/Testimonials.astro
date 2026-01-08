@@ -1,5 +1,6 @@
 ---
 import { Play, Quote, MapPin, Instagram, Youtube } from "lucide-react";
+import SpotlightCard from "./SpotlightCard";
 import landingContent from "../data/landing-content.json";
 
 const { testimonials } = landingContent;
@@ -7,9 +8,34 @@ const { videoTestimonials, textTestimonials } = testimonials;
 ---
 
 <section
-    class="py-16 bg-white overflow-hidden min-h-screen snap-start flex flex-col justify-center"
+    class="py-16 bg-white overflow-hidden min-h-screen snap-start flex flex-col justify-center relative"
+    id="testimonials-section"
 >
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Background Video Layer -->
+    <div class="absolute inset-0 z-0">
+        {
+            testimonials.backgroundVideos?.map((videoStats, index) => (
+                <div
+                    class="testimonial-video-container absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0"
+                    data-index={index}
+                >
+                    <video
+                        autoplay
+                        muted
+                        playsinline
+                        preload="auto"
+                        class="w-full h-full object-cover"
+                    >
+                        <source src={videoStats} type="video/mp4" />
+                    </video>
+                </div>
+            ))
+        }
+        <!-- Overlay for readability -->
+        <div class="absolute inset-0 bg-white/90 backdrop-blur-[2px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <span
                 class="text-royalPink-600 font-bold tracking-wider uppercase text-sm"
@@ -31,7 +57,7 @@ const { videoTestimonials, textTestimonials } = testimonials;
         <div class="flex overflow-x-auto gap-6 pb-8 hide-scroll snap-x">
             {
                 videoTestimonials.map((testimonial, index) => (
-                    <div class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-9/16 group cursor-pointer snap-center transform transition-transform hover:-translate-y-2">
+                    <div class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-9/16 group cursor-pointer snap-center transform transition-transform hover:-translate-y-2 isolate will-change-transform z-0">
                         {/* Render Content Based on Type */}
                         {testimonial.type === "url" ||
                         testimonial.type === "asset" ? (
@@ -105,7 +131,11 @@ const { videoTestimonials, textTestimonials } = testimonials;
             <div class="flex overflow-x-auto gap-6 pb-4 hide-scroll snap-x">
                 {
                     textTestimonials.map((item, index) => (
-                        <div class="w-[85vw] max-w-[400px] md:w-[450px] bg-champagne/30 p-8 rounded-2xl relative border border-champagne/50 snap-center shrink-0 flex flex-col gap-4">
+                        <SpotlightCard
+                            client:visible
+                            spotlightColor="rgba(255, 223, 186, 0.4)"
+                            className="w-[85vw] max-w-[400px] md:w-[450px] !bg-champagne/30 !border-champagne/50 p-8 snap-center shrink-0 flex flex-col gap-4 h-full"
+                        >
                             <Quote
                                 className="text-marigold-400 opacity-60 self-start"
                                 size={40}
@@ -128,10 +158,101 @@ const { videoTestimonials, textTestimonials } = testimonials;
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </SpotlightCard>
                     ))
                 }
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    const section = document.getElementById("testimonials-section");
+    if (section) {
+        const videoContainers = section.querySelectorAll(
+            ".testimonial-video-container",
+        );
+        const videos = Array.from(videoContainers).map((container) =>
+            container.querySelector("video"),
+        );
+        let currentVideoIndex = -1;
+        let isSwitching = false;
+
+        const playVideoToCheck = async (videoEl) => {
+            try {
+                if (videoEl.readyState < 2) {
+                    await new Promise((resolve) => {
+                        videoEl.oncanplay = resolve;
+                        setTimeout(resolve, 3000);
+                    });
+                }
+                await videoEl.play();
+                return true;
+            } catch (e) {
+                return false;
+            }
+        };
+
+        const switchVideo = async () => {
+            if (isSwitching) return;
+            isSwitching = true;
+
+            let nextIndex = (currentVideoIndex + 1) % videoContainers.length;
+            let attempts = 0;
+            let foundPlayable = false;
+
+            while (attempts < videos.length && !foundPlayable) {
+                const nextContainer = videoContainers[nextIndex];
+                const nextVideo = videos[nextIndex];
+                nextVideo.currentTime = 0;
+
+                const isPlaying = await playVideoToCheck(nextVideo);
+
+                if (isPlaying) {
+                    if (currentVideoIndex >= 0) {
+                        const currentContainer =
+                            videoContainers[currentVideoIndex];
+                        currentContainer.classList.remove("opacity-100");
+                        currentContainer.classList.add("opacity-0");
+                        const oldVideo = videos[currentVideoIndex];
+                        setTimeout(() => {
+                            oldVideo.pause();
+                        }, 1000);
+                    }
+
+                    nextContainer.classList.remove("opacity-0");
+                    nextContainer.classList.add("opacity-100");
+                    currentVideoIndex = nextIndex;
+                    foundPlayable = true;
+                } else {
+                    nextIndex = (nextIndex + 1) % videoContainers.length;
+                    attempts++;
+                }
+            }
+            isSwitching = false;
+        };
+
+        if (videos.length > 0) {
+            videos.forEach((video, idx) => {
+                video.removeAttribute("loop");
+                video.onended = () => {
+                    if (idx === currentVideoIndex && !isSwitching) {
+                        switchVideo();
+                    }
+                };
+            });
+            // Observer to play only when in view
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting && currentVideoIndex === -1) {
+                            switchVideo();
+                        }
+                    });
+                },
+                { threshold: 0.1 },
+            );
+            observer.observe(section);
+        }
+    }
+</script>

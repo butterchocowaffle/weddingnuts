@@ -1,0 +1,161 @@
+---
+import { ArrowUpRight } from "lucide-react";
+import Footer from "./Footer.astro";
+import landingContent from "../data/landing-content.json";
+
+const { cta } = landingContent;
+---
+
+<!-- Unified Wrapper for Snap -->
+<div class="snap-start flex flex-col">
+    <!-- CTA Section -->
+    <section
+        class="bg-royalPink-900 py-16 px-4 relative overflow-hidden shrink-0 min-h-screen flex flex-col justify-center"
+        id="cta-section"
+    >
+        <!-- Background Video Layer -->
+        <div class="absolute inset-0 z-0">
+            {
+                cta.backgroundVideos?.map((videoStats, index) => (
+                    <div
+                        class="cta-video-container absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0"
+                        data-index={index}
+                    >
+                        <video
+                            autoplay
+                            muted
+                            playsinline
+                            preload="auto"
+                            class="w-full h-full object-cover"
+                        >
+                            <source src={videoStats} type="video/mp4" />
+                        </video>
+                    </div>
+                ))
+            }
+            <div
+                class="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/80 via-transparent to-black/80"
+            >
+            </div>
+        </div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h2
+                class="text-3xl md:text-4xl font-serif font-bold text-white mb-6"
+            >
+                Ready to Plan the Perfect Wedding?
+            </h2>
+            <p class="text-royalPink-100 mb-8 text-lg">
+                Join thousands of couples finding trusted vendors every day.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                    class="bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2"
+                >
+                    Find Vendors Now <ArrowUpRight size={18} />
+                </button>
+                <button
+                    class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-royalPink-900 transition transform hover:-translate-y-1 active:scale-95"
+                >
+                    List Your Business
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const section = document.getElementById("cta-section");
+        if (section) {
+            const videoContainers = section.querySelectorAll(
+                ".cta-video-container",
+            );
+            const videos = Array.from(videoContainers).map((container) =>
+                container.querySelector("video"),
+            );
+            let currentVideoIndex = -1;
+            let isSwitching = false;
+
+            const playVideoToCheck = async (videoEl) => {
+                try {
+                    if (videoEl.readyState < 2) {
+                        await new Promise((resolve) => {
+                            videoEl.oncanplay = resolve;
+                            setTimeout(resolve, 3000);
+                        });
+                    }
+                    await videoEl.play();
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            };
+
+            const switchVideo = async () => {
+                if (isSwitching) return;
+                isSwitching = true;
+
+                let nextIndex =
+                    (currentVideoIndex + 1) % videoContainers.length;
+                let attempts = 0;
+                let foundPlayable = false;
+
+                while (attempts < videos.length && !foundPlayable) {
+                    const nextContainer = videoContainers[nextIndex];
+                    const nextVideo = videos[nextIndex];
+                    nextVideo.currentTime = 0;
+
+                    const isPlaying = await playVideoToCheck(nextVideo);
+
+                    if (isPlaying) {
+                        if (currentVideoIndex >= 0) {
+                            const currentContainer =
+                                videoContainers[currentVideoIndex];
+                            currentContainer.classList.remove("opacity-100");
+                            currentContainer.classList.add("opacity-0");
+                            const oldVideo = videos[currentVideoIndex];
+                            setTimeout(() => {
+                                oldVideo.pause();
+                            }, 1000);
+                        }
+
+                        nextContainer.classList.remove("opacity-0");
+                        nextContainer.classList.add("opacity-100");
+                        currentVideoIndex = nextIndex;
+                        foundPlayable = true;
+                    } else {
+                        nextIndex = (nextIndex + 1) % videoContainers.length;
+                        attempts++;
+                    }
+                }
+                isSwitching = false;
+            };
+
+            if (videos.length > 0) {
+                videos.forEach((video, idx) => {
+                    video.removeAttribute("loop");
+                    video.onended = () => {
+                        if (idx === currentVideoIndex && !isSwitching) {
+                            switchVideo();
+                        }
+                    };
+                });
+                // Observer to play only when in view
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (
+                                entry.isIntersecting &&
+                                currentVideoIndex === -1
+                            ) {
+                                switchVideo();
+                            }
+                        });
+                    },
+                    { threshold: 0.1 },
+                );
+                observer.observe(section);
+            }
+        }
+    </script>
+
+    <Footer />
+</div>

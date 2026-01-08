@@ -1,11 +1,37 @@
 ---
 import { ArrowRight } from "lucide-react";
+import landingContent from "../data/landing-content.json";
+
+const { services } = landingContent;
 ---
 
 <section
     class="py-16 bg-gray-50 relative overflow-hidden min-h-screen snap-start flex flex-col justify-center"
+    id="services-section"
 >
-    <!-- Pillars Removed -->
+    <!-- Background Video Layer -->
+    <div class="absolute inset-0 z-0">
+        {
+            services.backgroundVideos?.map((videoStats, index) => (
+                <div
+                    class="services-video-container absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0"
+                    data-index={index}
+                >
+                    <video
+                        autoplay
+                        muted
+                        playsinline
+                        preload="auto"
+                        class="w-full h-full object-cover"
+                    >
+                        <source src={videoStats} type="video/mp4" />
+                    </video>
+                </div>
+            ))
+        }
+        <!-- Overlay for readability -->
+        <div class="absolute inset-0 bg-white/90 backdrop-blur-[2px]"></div>
+    </div>
 
     <!-- Content Container -->
     <!-- Mobile: Add heavy left padding to clear the pilar -->
@@ -41,7 +67,7 @@ import { ArrowRight } from "lucide-react";
                 class="col-span-2 row-span-2 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
             >
                 <img
-                    src="https://images.unsplash.com/photo-1511285560982-1351cdeb9821?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="https://images.pexels.com/photos/33417234/pexels-photo-33417234.jpeg"
                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                     alt="Wedding Venue"
                 />
@@ -82,7 +108,7 @@ import { ArrowRight } from "lucide-react";
                 class="col-span-1 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
             >
                 <img
-                    src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="https://images.pexels.com/photos/8886985/pexels-photo-8886985.jpeg"
                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                     alt="Decor"
                 />
@@ -99,7 +125,7 @@ import { ArrowRight } from "lucide-react";
                 class="col-span-1 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
             >
                 <img
-                    src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="https://images.pexels.com/photos/16525677/pexels-photo-16525677.jpeg"
                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                     alt="Photography"
                 />
@@ -116,7 +142,7 @@ import { ArrowRight } from "lucide-react";
                 class="col-span-2 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
             >
                 <img
-                    src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src="https://images.pexels.com/photos/2114229/pexels-photo-2114229.jpeg"
                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                     alt="Makeup"
                 />
@@ -141,3 +167,94 @@ import { ArrowRight } from "lucide-react";
         </div>
     </div>
 </section>
+
+<script>
+    const section = document.getElementById("services-section");
+    if (section) {
+        const videoContainers = section.querySelectorAll(
+            ".services-video-container",
+        );
+        const videos = Array.from(videoContainers).map((container) =>
+            container.querySelector("video"),
+        );
+        let currentVideoIndex = -1;
+        let isSwitching = false;
+
+        const playVideoToCheck = async (videoEl) => {
+            try {
+                if (videoEl.readyState < 2) {
+                    await new Promise((resolve) => {
+                        videoEl.oncanplay = resolve;
+                        setTimeout(resolve, 3000);
+                    });
+                }
+                await videoEl.play();
+                return true;
+            } catch (e) {
+                return false;
+            }
+        };
+
+        const switchVideo = async () => {
+            if (isSwitching) return;
+            isSwitching = true;
+
+            let nextIndex = (currentVideoIndex + 1) % videoContainers.length;
+            let attempts = 0;
+            let foundPlayable = false;
+
+            while (attempts < videos.length && !foundPlayable) {
+                const nextContainer = videoContainers[nextIndex];
+                const nextVideo = videos[nextIndex];
+                nextVideo.currentTime = 0;
+
+                const isPlaying = await playVideoToCheck(nextVideo);
+
+                if (isPlaying) {
+                    if (currentVideoIndex >= 0) {
+                        const currentContainer =
+                            videoContainers[currentVideoIndex];
+                        currentContainer.classList.remove("opacity-100");
+                        currentContainer.classList.add("opacity-0");
+                        const oldVideo = videos[currentVideoIndex];
+                        setTimeout(() => {
+                            oldVideo.pause();
+                        }, 1000);
+                    }
+
+                    nextContainer.classList.remove("opacity-0");
+                    nextContainer.classList.add("opacity-100");
+                    currentVideoIndex = nextIndex;
+                    foundPlayable = true;
+                } else {
+                    nextIndex = (nextIndex + 1) % videoContainers.length;
+                    attempts++;
+                }
+            }
+            isSwitching = false;
+        };
+
+        if (videos.length > 0) {
+            videos.forEach((video, idx) => {
+                video.removeAttribute("loop");
+                video.onended = () => {
+                    if (idx === currentVideoIndex && !isSwitching) {
+                        switchVideo();
+                    }
+                };
+            });
+            // Observer to play only when in view
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting && currentVideoIndex === -1) {
+                            switchVideo();
+                        }
+                    });
+                },
+                { threshold: 0.1 },
+            );
+            observer.observe(section);
+        }
+    }
+</script>

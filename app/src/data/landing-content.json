@@ -55,6 +55,18 @@
         ]
     },
     "testimonials": {
+        "backgroundVideos": [
+            "https://www.pexels.com/download/video/854947/",
+            "https://www.pexels.com/download/video/7238857/",
+            "https://www.pexels.com/download/video/984621/",
+            "https://www.pexels.com/download/video/3422958/",
+            "https://www.pexels.com/download/video/8343767/",
+            "https://www.pexels.com/download/video/3930080/",
+            "https://www.pexels.com/download/video/855142/",
+            "https://www.pexels.com/download/video/1689826/",
+            "https://www.pexels.com/download/video/8114596/",
+            "https://www.pexels.com/download/video/1387951/"
+        ],
         "videoTestimonials": [
             {
                 "type": "asset",
@@ -121,6 +133,18 @@
                 "author": "Meera K.",
                 "subtitle": "Udaipur, Jan 2025"
             }
+        ]
+    },
+    "services": {
+        "backgroundVideos": [
+            "https://www.pexels.com/download/video/4124198/",
+            "https://www.pexels.com/download/video/4174213/"
+        ]
+    },
+    "cta": {
+        "backgroundVideos": [
+            "https://www.pexels.com/download/video/3122106/",
+            "https://www.pexels.com/download/video/8776123/"
         ]
     }
 }
