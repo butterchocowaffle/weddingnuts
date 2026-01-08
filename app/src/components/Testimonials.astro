@@ -1,10 +1,49 @@
 ---
-import { Play, Quote, MapPin, Instagram, Youtube } from "lucide-react";
+import { Play, Quote, MapPin, Instagram, Youtube, Twitter } from "lucide-react";
 import SpotlightCard from "./SpotlightCard";
 import landingContent from "../data/landing-content.json";
 
 const { testimonials } = landingContent;
 const { videoTestimonials, textTestimonials } = testimonials;
+
+// Fallback thumbnails for video testimonials without a thumbnail
+const fallbackThumbnails = [
+    "https://images.pexels.com/photos/35556974/pexels-photo-35556974.jpeg",
+    "https://images.pexels.com/photos/35567970/pexels-photo-35567970.jpeg",
+    "https://images.pexels.com/photos/35567964/pexels-photo-35567964.jpeg",
+    "https://images.pexels.com/photos/35567941/pexels-photo-35567941.jpeg",
+    "https://images.pexels.com/photos/1589216/pexels-photo-1589216.jpeg",
+    "https://images.pexels.com/photos/725458/pexels-photo-725458.jpeg",
+    "https://images.pexels.com/photos/11146331/pexels-photo-11146331.jpeg",
+    "https://images.pexels.com/photos/2781104/pexels-photo-2781104.jpeg",
+    "https://images.pexels.com/photos/12430047/pexels-photo-12430047.jpeg",
+    "https://images.pexels.com/photos/18253230/pexels-photo-18253230.jpeg",
+    "https://images.pexels.com/photos/2726181/pexels-photo-2726181.jpeg",
+    "https://images.pexels.com/photos/12579916/pexels-photo-12579916.jpeg",
+    "https://images.pexels.com/photos/17261593/pexels-photo-17261593.jpeg",
+];
+
+// Shuffle and assign unique fallback thumbnails
+const shuffledFallbacks = [...fallbackThumbnails].sort(
+    () => Math.random() - 0.5,
+);
+let fallbackIndex = 0;
+
+const processedTestimonials = videoTestimonials.map((testimonial) => {
+    // Types that need thumbnails: url, instagram, twitter
+    const needsThumbnail =
+        testimonial.type === "url" ||
+        testimonial.type === "instagram" ||
+        testimonial.type === "twitter";
+    if (needsThumbnail && !testimonial.thumbnail) {
+        return {
+            ...testimonial,
+            thumbnail:
+                shuffledFallbacks[fallbackIndex++ % shuffledFallbacks.length],
+        };
+    }
+    return testimonial;
+});
 ---
 
 <section
@@ -68,32 +107,76 @@ const { videoTestimonials, textTestimonials } = testimonials;
             style="padding-left: max(1rem, calc((100vw - 80rem) / 2 + 1rem)); padding-right: max(1rem, calc((100vw - 80rem) / 2 + 1rem));"
         >
             {
-                videoTestimonials.map((testimonial, index) => (
+                processedTestimonials.map((testimonial, index) => (
                     <div class="w-[280px] h-[498px] md:w-[320px] md:h-[568px] flex-shrink-0 bg-black rounded-xl overflow-hidden shadow-lg relative group cursor-pointer snap-center transition-all duration-300 hover:shadow-2xl hover:shadow-marigold-500/20 hover:border-marigold-500/30 border border-transparent">
                         {/* Render Content Based on Type */}
-                        {testimonial.type === "url" ||
-                        testimonial.type === "asset" ? (
+                        {testimonial.type === "url" ? (
                             <>
-                                <img
-                                    src={
-                                        testimonial.type === "asset"
-                                            ? testimonial.src
-                                            : testimonial.thumbnail
-                                    }
-                                    class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
-                                    alt={testimonial.title}
-                                    loading="lazy"
-                                    width="280"
-                                    height="498"
-                                />
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition duration-300 shadow-xl">
-                                        <Play
-                                            className="text-white ml-1 fill-white"
-                                            size={24}
-                                        />
+                                {/* Thumbnail State */}
+                                <div class="video-thumbnail-state w-full h-full">
+                                    <img
+                                        src={testimonial.thumbnail}
+                                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                                        alt={testimonial.title}
+                                        loading="lazy"
+                                        width="280"
+                                        height="498"
+                                    />
+                                    <div class="absolute inset-0 flex items-center justify-center play-button-overlay">
+                                        <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition duration-300 shadow-xl">
+                                            <Play
+                                                className="text-white ml-1 fill-white"
+                                                size={24}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
+                                {/* Video State (hidden by default) */}
+                                <video
+                                    class="video-player w-full h-full object-cover hidden"
+                                    controls
+                                    playsinline
+                                    preload="none"
+                                    data-src={testimonial.src}
+                                >
+                                    <source type="video/mp4" />
+                                </video>
+                            </>
+                        ) : testimonial.type === "asset" ? (
+                            <>
+                                {/* Thumbnail/Poster State */}
+                                <div class="video-thumbnail-state w-full h-full">
+                                    <video
+                                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105 pointer-events-none"
+                                        muted
+                                        preload="metadata"
+                                    >
+                                        <source
+                                            src={testimonial.src}
+                                            type="video/mp4"
+                                        />
+                                    </video>
+                                    <div class="absolute inset-0 flex items-center justify-center play-button-overlay">
+                                        <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition duration-300 shadow-xl">
+                                            <Play
+                                                className="text-white ml-1 fill-white"
+                                                size={24}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Video Player State (hidden by default) */}
+                                <video
+                                    class="video-player w-full h-full object-cover hidden"
+                                    controls
+                                    playsinline
+                                    preload="none"
+                                >
+                                    <source
+                                        src={testimonial.src}
+                                        type="video/mp4"
+                                    />
+                                </video>
                             </>
                         ) : testimonial.type === "youtube" ? (
                             <iframe
@@ -105,18 +188,57 @@ const { videoTestimonials, textTestimonials } = testimonials;
                                 allowfullscreen
                             />
                         ) : testimonial.type === "instagram" ? (
-                            <div class="w-full h-full bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
-                                <Instagram className="text-white" size={48} />
-                                <p class="absolute bottom-20 text-white font-bold text-sm px-4 text-center">
-                                    View on Instagram
-                                </p>
-                                {/* In a real scenario, you'd embed the IG post here or link to it */}
+                            <>
+                                <img
+                                    src={testimonial.thumbnail}
+                                    class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                                    alt={testimonial.title}
+                                    loading="lazy"
+                                    width="280"
+                                    height="498"
+                                />
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-14 h-14 bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition duration-300 shadow-xl">
+                                        <Instagram
+                                            className="text-white"
+                                            size={24}
+                                        />
+                                    </div>
+                                </div>
                                 <a
                                     href={testimonial.src}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     class="absolute inset-0 z-10"
+                                    aria-label={`View ${testimonial.title} on Instagram`}
                                 />
-                            </div>
+                            </>
+                        ) : testimonial.type === "twitter" ? (
+                            <>
+                                <img
+                                    src={testimonial.thumbnail}
+                                    class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
+                                    alt={testimonial.title}
+                                    loading="lazy"
+                                    width="280"
+                                    height="498"
+                                />
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-14 h-14 bg-black rounded-full flex items-center justify-center border border-white/40 group-hover:scale-110 transition duration-300 shadow-xl">
+                                        <Twitter
+                                            className="text-white fill-white"
+                                            size={24}
+                                        />
+                                    </div>
+                                </div>
+                                <a
+                                    href={testimonial.src}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="absolute inset-0 z-10"
+                                    aria-label={`View ${testimonial.title} on X`}
+                                />
+                            </>
                         ) : null}
 
                         <div class="absolute bottom-0 left-0 right-0 p-4 bg-linear-to-t from-black to-transparent pointer-events-none">
@@ -193,6 +315,68 @@ const { videoTestimonials, textTestimonials } = testimonials;
 </section>
 
 <script>
+    // Video Testimonial Card Click Handler
+    const videoCards = document.querySelectorAll(".video-thumbnail-state");
+    videoCards.forEach((thumbnailState) => {
+        const card = thumbnailState.closest(".group");
+        if (!card) return;
+
+        const videoPlayer = card.querySelector(
+            ".video-player",
+        ) as HTMLVideoElement;
+        const infoOverlay = card.querySelector(
+            ".bg-linear-to-t",
+        ) as HTMLElement;
+
+        if (!videoPlayer) return;
+
+        // Click to play
+        thumbnailState.addEventListener("click", async (e) => {
+            e.stopPropagation();
+
+            // Load video source if not loaded (for lazy loading)
+            const src = videoPlayer.dataset.src;
+            const source = videoPlayer.querySelector("source");
+            if (src && source && !source.src) {
+                source.src = src;
+                videoPlayer.load();
+            }
+            // For asset type - source is already set, just need to load
+            if (source && source.src && videoPlayer.readyState === 0) {
+                videoPlayer.load();
+            }
+
+            // Hide thumbnail, show video
+            thumbnailState.classList.add("hidden");
+            videoPlayer.classList.remove("hidden");
+            if (infoOverlay) infoOverlay.classList.add("hidden");
+
+            try {
+                await videoPlayer.play();
+            } catch (err) {
+                console.log("Video play failed:", err);
+                // Restore thumbnail on error
+                thumbnailState.classList.remove("hidden");
+                videoPlayer.classList.add("hidden");
+                if (infoOverlay) infoOverlay.classList.remove("hidden");
+            }
+        });
+
+        // When video ends, show thumbnail again
+        videoPlayer.addEventListener("ended", () => {
+            videoPlayer.classList.add("hidden");
+            thumbnailState.classList.remove("hidden");
+            if (infoOverlay) infoOverlay.classList.remove("hidden");
+            videoPlayer.currentTime = 0;
+        });
+
+        // When video is paused (user clicks pause), keep video visible
+        // but if they click outside, restore thumbnail
+        videoPlayer.addEventListener("click", (e) => {
+            e.stopPropagation();
+        });
+    });
+
     const section = document.getElementById("testimonials-section");
     if (section) {
         const videoContainers = section.querySelectorAll(
