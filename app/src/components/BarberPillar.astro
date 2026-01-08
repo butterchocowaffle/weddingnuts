@@ -1,0 +1,109 @@
+---
+
+---
+
+<div class="barberContainer h-full flex flex-col items-center">
+    <!-- Top Cap -->
+    <div class="cap shrink-0"></div>
+    <div class="endCap shrink-0"></div>
+
+    <!-- Spiral Shaft -->
+    <div class="barberWrap flex-grow relative w-[54px]">
+        <div class="barber h-full w-full"></div>
+        <!-- 3D Shading Overlay -->
+        <div
+            class="absolute inset-0 pointer-events-none"
+            style="background: linear-gradient(to right, rgba(0,0,0,0.4), transparent 40%, transparent 60%, rgba(0,0,0,0.4));"
+        >
+        </div>
+    </div>
+
+    <!-- Bottom Cap - Reversed order for symmetry -->
+    <div class="endCap shrink-0"></div>
+    <div class="cap shrink-0"></div>
+</div>
+
+<style>
+    .barberContainer {
+        width: 84px;
+        /* Height is controlled by parent now */
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    }
+
+    .endCap {
+        width: 54px;
+        height: 15px; /* Fixed height for caps */
+        margin: 5px 0; /* Vertical margin only */
+        background: linear-gradient(
+            to right,
+            #b17303,
+            #ffdf01,
+            #b17303
+        ); /* Gold Gradient */
+        border-radius: 2px;
+        box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .cap {
+        width: 84px;
+        height: 15px;
+        background: linear-gradient(
+            to right,
+            #8a5a02,
+            #ffdf01,
+            #8a5a02
+        ); /* Darker Gold Gradient */
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .barberWrap {
+        /* Height fills available space via flex-grow */
+        margin: 5px 0;
+        overflow: hidden; /* Ensures the animation stays contained */
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        background-color: #b17303; /* Fallback */
+    }
+
+    .barber {
+        background: linear-gradient(
+            -45deg,
+            #b17303 25%,
+            #ffdf01 25%,
+            #ffdf01 50%,
+            #b17303 50%,
+            #b17303 75%,
+            #ffdf01 75%
+        );
+        background-size: 54px 54px; /* Scaled pattern size */
+        /* Scroll animation is handled via JS now */
+        will-change: background-position;
+    }
+</style>
+
+<script>
+    // Scroll Animation Logic
+    document.addEventListener("DOMContentLoaded", () => {
+        // Select all barber elements (in case of multiple pillars)
+        const barbers = document.querySelectorAll(".barber");
+
+        // Use a single scroll listener for performance
+        window.addEventListener(
+            "scroll",
+            () => {
+                const scrollY = window.scrollY;
+                const speed = 0.5; // Adjust speed ratio as desired
+                const offset = scrollY * speed;
+
+                barbers.forEach((barber) => {
+                    // We move the background-position-y to simulate rotation along the spiral
+                    // (technically x and y for diagonal, but y movement is sufficient for the illusion)
+                    (barber as HTMLElement).style.backgroundPosition =
+                        `0 ${offset}px`;
+                });
+            },
+            { passive: true },
+        ); // Passive listener for better scroll performance
+    });
+</script>

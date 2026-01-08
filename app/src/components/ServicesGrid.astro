@@ -1,11 +1,31 @@
 ---
 import { ArrowRight } from "lucide-react";
+import BarberPillar from "./BarberPillar.astro";
 ---
 
-<section class="py-16 bg-gray-50 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<section class="py-16 bg-gray-50 relative overflow-hidden min-h-[800px]">
+    <!-- Left Pillar - Visible on all screens, full height -->
+    <div
+        class="absolute left-0 top-0 bottom-0 w-24 flex flex-col items-center justify-center z-0 py-8"
+    >
+        <div class="h-full scale-75 md:scale-100 origin-top md:origin-center">
+            <BarberPillar />
+        </div>
+    </div>
+
+    <!-- Right Pillar - Hidden on mobile, full height -->
+    <div
+        class="absolute right-0 top-0 bottom-0 w-24 hidden md:flex flex-col items-center justify-center z-0 py-8"
+    >
+        <div class="h-full">
+            <BarberPillar />
+        </div>
+    </div>
+
+    <!-- Content Container -->
+    <!-- Mobile: Add heavy left padding to clear the pilar -->
+    <div class="max-w-7xl mx-auto pl-24 pr-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex justify-between items-end mb-10">
-            <!-- Added padding left on mobile to avoid overlap with left pillar if it overlays -->
             <div>
                 <h2
                     class="text-3xl md:text-4xl font-serif font-bold text-gray-900"
@@ -28,11 +48,12 @@ import { ArrowRight } from "lucide-react";
         </div>
 
         <!-- Bento Grid Layout -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
+        <!-- Mobile: 1 column, Desktop: 4 columns -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[200px]">
             <!-- Venues (Large Tile) -->
             <a
                 href="#"
-                class="col-span-2 row-span-2 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
+                class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
             >
                 <img
                     src="https://images.unsplash.com/photo-1511285560982-1351cdeb9821?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
@@ -107,7 +128,7 @@ import { ArrowRight } from "lucide-react";
             <!-- Attire/Makeup -->
             <a
                 href="#"
-                class="col-span-2 md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
+                class="md:col-span-1 row-span-1 relative group overflow-hidden rounded-2xl shadow-md cursor-pointer block"
             >
                 <img
                     src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
