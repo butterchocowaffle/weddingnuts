@@ -14,8 +14,8 @@ export default function Navbar({ logo }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center group cursor-pointer">
-            <a href="#" className="flex items-center gap-2 transform transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-105">
+          <div className="shrink-0 flex items-center group cursor-pointer">
+            <a href="#" aria-label="WeddingNuts Home" className="flex items-center gap-2 transform transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-105">
               {/* Programmable Logo */}
               {logo}
               <div className="flex flex-col">
@@ -45,6 +45,7 @@ export default function Navbar({ logo }: NavbarProps) {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-white hover:text-marigold-400 focus:outline-none"
+              aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>

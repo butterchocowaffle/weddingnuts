@@ -66,13 +66,14 @@ export default function SearchForm() {
         >
             <form className="flex flex-col md:flex-row gap-3" onSubmit={(e) => e.preventDefault()}>
                 {/* Service Input */}
-                <div className="relative flex-grow group">
+                <div className="relative grow group">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Search className="text-gray-400 group-focus-within:text-marigold-500 transition-colors" size={20} />
                     </div>
                     <select
                         className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-marigold-500 focus:border-marigold-500 sm:text-sm appearance-none text-gray-700 font-medium cursor-pointer transition-shadow"
                         defaultValue=""
+                        aria-label="Select Category"
                     >
                         <option value="" disabled>I'm looking for...</option>
                         <option value="venue">Wedding Venues / Lawns</option>
@@ -88,7 +89,7 @@ export default function SearchForm() {
                 </div>
 
                 {/* Location Input */}
-                <div className="relative flex-grow group" ref={dropdownRef}>
+                <div className="relative grow group" ref={dropdownRef}>
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <MapPin className="text-gray-400 group-focus-within:text-marigold-500 transition-colors" size={20} />
                     </div>
@@ -96,6 +97,7 @@ export default function SearchForm() {
                         type="text"
                         className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-marigold-500 focus:border-marigold-500 sm:text-sm transition-shadow"
                         placeholder="City or Pin Code (e.g. Delhi, 110001)"
+                        aria-label="Enter Location"
                         value={locationQuery}
                         onChange={(e) => setLocationQuery(e.target.value)}
                         onFocus={() => {
@@ -123,7 +125,7 @@ export default function SearchForm() {
                                         className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-marigold-50 transition-colors border-b border-gray-50 last:border-b-0 flex items-start gap-2"
                                         onClick={() => handleLocationSelect(location.display_name)}
                                     >
-                                        <MapPin size={16} className="mt-0.5 text-gray-400 flex-shrink-0" />
+                                        <MapPin size={16} className="mt-0.5 text-gray-400 shrink-0" />
                                         <span className="line-clamp-2">{location.display_name}</span>
                                     </button>
                                 ))}
