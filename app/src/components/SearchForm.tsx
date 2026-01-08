@@ -38,7 +38,13 @@ export default function SearchForm() {
         setIsLoading(true);
         try {
             const response = await fetch(
-                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in&limit=5`
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in&limit=5`,
+                {
+                    headers: {
+                        'User-Agent': 'WeddingNuts/1.0',
+                        'Accept': 'application/json'
+                    }
+                }
             );
             const data = await response.json();
             setLocations(data);
@@ -73,6 +79,8 @@ export default function SearchForm() {
                     <select
                         className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-marigold-500 focus:border-marigold-500 sm:text-sm appearance-none text-gray-700 font-medium cursor-pointer transition-shadow"
                         defaultValue=""
+                        name="service-category"
+                        id="service-category"
                         aria-label="Select Category"
                     >
                         <option value="" disabled>I'm looking for...</option>
@@ -97,6 +105,8 @@ export default function SearchForm() {
                         type="text"
                         className="block w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-marigold-500 focus:border-marigold-500 sm:text-sm transition-shadow"
                         placeholder="City or Pin Code (e.g. Delhi, 110001)"
+                        name="location"
+                        id="location"
                         aria-label="Enter Location"
                         value={locationQuery}
                         onChange={(e) => setLocationQuery(e.target.value)}
@@ -137,6 +147,8 @@ export default function SearchForm() {
                 {/* Button */}
                 <button
                     type="submit"
+                    name="search-submit"
+                    id="search-submit"
                     className="bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg transition duration-200 shadow-lg flex items-center justify-center gap-2 active:scale-95"
                 >
                     <span>Search</span>

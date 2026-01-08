@@ -8,11 +8,11 @@ const { videoTestimonials, textTestimonials } = testimonials;
 ---
 
 <section
-    class="py-16 bg-white overflow-hidden min-h-screen snap-start flex flex-col justify-center relative"
+    class="py-16 bg-white min-h-screen snap-start relative"
     id="testimonials-section"
 >
-    <!-- Background Video Layer -->
-    <div class="absolute inset-0 z-0">
+    <!-- Background Video Layer - Contains its own overflow hidden -->
+    <div class="absolute inset-0 z-0 overflow-hidden">
         {
             testimonials.backgroundVideos?.map((videoStats, index) => (
                 <div
@@ -36,7 +36,9 @@ const { videoTestimonials, textTestimonials } = testimonials;
         <div class="absolute inset-0 bg-white/90 backdrop-blur-[2px]"></div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Content Container - No overflow restrictions -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Section Header -->
         <div class="text-center mb-12">
             <span
                 class="text-royalPink-600 font-bold tracking-wider uppercase text-sm"
@@ -49,16 +51,25 @@ const { videoTestimonials, textTestimonials } = testimonials;
             </h2>
         </div>
 
-        <!-- Video Cards Scroll Container -->
-        <h3
-            class="text-xl font-bold text-gray-900 mb-6 px-2 border-l-4 border-marigold-500 ml-1"
+        <!-- Video Stories Section -->
+        <div class="mb-16">
+            <h3
+                class="text-xl font-bold text-gray-900 mb-6 px-2 border-l-4 border-marigold-500"
+            >
+                Video Stories
+            </h3>
+        </div>
+    </div>
+
+    <!-- Video Cards Scroll Container - Full width, outside the max-w container -->
+    <div class="relative z-10 w-full overflow-x-auto hide-scroll snap-x pb-8">
+        <div
+            class="flex gap-6 px-4 sm:px-6 lg:px-8"
+            style="padding-left: max(1rem, calc((100vw - 80rem) / 2 + 1rem)); padding-right: max(1rem, calc((100vw - 80rem) / 2 + 1rem));"
         >
-            Video Stories
-        </h3>
-        <div class="flex overflow-x-auto gap-6 pb-8 hide-scroll snap-x">
             {
                 videoTestimonials.map((testimonial, index) => (
-                    <div class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-9/16 group cursor-pointer snap-center transition-all duration-300 hover:shadow-2xl hover:shadow-marigold-500/20 hover:border-marigold-500/30 border border-transparent z-0">
+                    <div class="w-[280px] h-[498px] md:w-[320px] md:h-[568px] flex-shrink-0 bg-black rounded-xl overflow-hidden shadow-lg relative group cursor-pointer snap-center transition-all duration-300 hover:shadow-2xl hover:shadow-marigold-500/20 hover:border-marigold-500/30 border border-transparent">
                         {/* Render Content Based on Type */}
                         {testimonial.type === "url" ||
                         testimonial.type === "asset" ? (
@@ -123,49 +134,60 @@ const { videoTestimonials, textTestimonials } = testimonials;
                     </div>
                 ))
             }
+            {/* Spacer for right padding */}
+            <div class="w-4 sm:w-6 lg:w-8 shrink-0" aria-hidden="true"></div>
         </div>
+    </div>
 
-        <!-- Text Testimonials Scroll Scroll Container -->
-        <div class="mt-16">
-            <h3
-                class="text-xl font-bold text-gray-900 mb-6 px-2 border-l-4 border-royalPink-500 ml-1"
-            >
-                Client Reviews
-            </h3>
-            <div class="flex overflow-x-auto gap-6 pb-4 hide-scroll snap-x">
-                {
-                    textTestimonials.map((item, index) => (
-                        <SpotlightCard
-                            client:visible
-                            spotlightColor="rgba(255, 223, 186, 0.4)"
-                            className="w-[85vw] max-w-[400px] md:w-[450px] !bg-champagne/30 !border-champagne/50 p-8 snap-center shrink-0 flex flex-col gap-4 h-full"
-                        >
-                            <Quote
-                                className="text-marigold-400 opacity-60 self-start"
-                                size={40}
-                            />
-                            <div class="relative z-10">
-                                <p class="text-lg text-gray-700 italic font-serif leading-relaxed min-h-[100px] flex items-center">
-                                    "{item.text}"
-                                </p>
-                                <div class="mt-6 flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-royalPink-100 flex items-center justify-center font-bold text-royalPink-600">
-                                        {item.author.charAt(0)}
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-bold text-gray-900">
-                                            {item.author}
-                                        </span>
-                                        <span class="text-sm font-normal text-gray-500">
-                                            {item.subtitle}
-                                        </span>
-                                    </div>
+    <!-- Client Reviews Section -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <h3
+            class="text-xl font-bold text-gray-900 mb-6 px-2 border-l-4 border-royalPink-500"
+        >
+            Client Reviews
+        </h3>
+    </div>
+
+    <!-- Text Testimonials Scroll Container - Full width -->
+    <div class="relative z-10 w-full overflow-x-auto hide-scroll snap-x pb-8">
+        <div
+            class="flex gap-6"
+            style="padding-left: max(1rem, calc((100vw - 80rem) / 2 + 1rem)); padding-right: max(1rem, calc((100vw - 80rem) / 2 + 1rem));"
+        >
+            {
+                textTestimonials.map((item, index) => (
+                    <SpotlightCard
+                        client:visible
+                        spotlightColor="rgba(255, 223, 186, 0.4)"
+                        className="w-[85vw] max-w-[400px] md:w-[450px] !bg-champagne/30 !border-champagne/50 p-8 snap-center shrink-0 flex flex-col gap-4 h-full"
+                    >
+                        <Quote
+                            className="text-marigold-400 opacity-60 self-start"
+                            size={40}
+                        />
+                        <div class="relative z-10">
+                            <p class="text-lg text-gray-700 italic font-serif leading-relaxed min-h-[100px] flex items-center">
+                                "{item.text}"
+                            </p>
+                            <div class="mt-6 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-royalPink-100 flex items-center justify-center font-bold text-royalPink-600">
+                                    {item.author.charAt(0)}
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-gray-900">
+                                        {item.author}
+                                    </span>
+                                    <span class="text-sm font-normal text-gray-500">
+                                        {item.subtitle}
+                                    </span>
                                 </div>
                             </div>
-                        </SpotlightCard>
-                    ))
-                }
-            </div>
+                        </div>
+                    </SpotlightCard>
+                ))
+            }
+            {/* Spacer for right padding */}
+            <div class="w-4 sm:w-6 lg:w-8 shrink-0" aria-hidden="true"></div>
         </div>
     </div>
 </section>
