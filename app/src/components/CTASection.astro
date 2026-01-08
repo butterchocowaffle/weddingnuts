@@ -60,7 +60,7 @@ const { cta } = landingContent;
                     <h3 class="text-2xl font-serif text-white mb-6">
                         Get in Touch
                     </h3>
-                    <form class="space-y-4">
+                    <form id="contact-form" class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <input
                                 type="text"
@@ -96,7 +96,7 @@ const { cta } = landingContent;
                             class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-marigold-400 transition"
                         ></textarea>
                         <button
-                            type="button"
+                            type="submit"
                             name="contact-submit"
                             id="contact-submit"
                             aria-label="Send Message"
@@ -109,6 +109,8 @@ const { cta } = landingContent;
                 <!-- Right: Buttons -->
                 <div class="w-full md:w-2/5 flex flex-col gap-4 justify-center">
                     <button
+                        type="submit"
+                        form="contact-form"
                         class="hidden md:flex bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl active:scale-95 items-center justify-center gap-3 text-lg"
                     >
                         Send Message <ArrowUpRight size={20} />
@@ -133,6 +135,57 @@ const { cta } = landingContent;
     </section>
 
     <script>
+        // Contact Form Mailto Handler
+        const contactForm = document.getElementById(
+            "contact-form",
+        ) as HTMLFormElement;
+        if (contactForm) {
+            contactForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const name =
+                    (
+                        document.getElementById(
+                            "contact-name",
+                        ) as HTMLInputElement
+                    )?.value || "";
+                const phone =
+                    (
+                        document.getElementById(
+                            "contact-phone",
+                        ) as HTMLInputElement
+                    )?.value || "";
+                const email =
+                    (
+                        document.getElementById(
+                            "contact-email",
+                        ) as HTMLInputElement
+                    )?.value || "";
+                const message =
+                    (
+                        document.getElementById(
+                            "contact-message",
+                        ) as HTMLTextAreaElement
+                    )?.value || "";
+
+                const subject = encodeURIComponent(
+                    "Wedding Inquiry from " + (name || "Website Visitor"),
+                );
+                const body = encodeURIComponent(
+                    `Name: ${name}\n` +
+                        `Phone: ${phone}\n` +
+                        `Email: ${email}\n\n` +
+                        `Message:\n${message}`,
+                );
+
+                // Replace with your actual email address
+                const mailtoEmail = "contact@weddingnuts.in";
+                const mailtoLink = `mailto:${mailtoEmail}?subject=${subject}&body=${body}`;
+
+                window.location.href = mailtoLink;
+            });
+        }
+
         const section = document.getElementById("cta-section");
         if (section) {
             const videoContainers = section.querySelectorAll(
