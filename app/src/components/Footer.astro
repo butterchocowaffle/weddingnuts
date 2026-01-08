@@ -1,74 +1,188 @@
 ---
-import { Instagram, Youtube, Facebook, Mail, Phone, ArrowUpRight } from 'lucide-react';
+import {
+    Instagram,
+    Youtube,
+    Facebook,
+    Mail,
+    Phone,
+    ArrowUpRight,
+} from "lucide-react";
 ---
 
-<!-- CTA Section -->
-<section class="bg-royalPink-900 py-16 px-4 relative overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-    <div class="max-w-4xl mx-auto text-center relative z-10">
-        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-6">Ready to Plan the Perfect Wedding?</h2>
-        <p class="text-royalPink-100 mb-8 text-lg">Join thousands of couples finding trusted vendors every day.</p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2">
-                Find Vendors Now <ArrowUpRight size={18} />
-            </button>
-            <button class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-royalPink-900 transition transform hover:-translate-y-1 active:scale-95">
-                List Your Business
-            </button>
+<div class="min-h-screen snap-start flex flex-col justify-end">
+    <!-- CTA Section -->
+    <section
+        class="bg-royalPink-900 py-16 px-4 relative overflow-hidden shrink-0"
+    >
+        <div
+            class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"
+        >
         </div>
-    </div>
-</section>
-
-<!-- Main Footer -->
-<footer class="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div class="col-span-1 md:col-span-1">
-            <a href="#" class="text-2xl font-serif font-bold text-white tracking-wide block mb-4">
-                Wedding<span class="text-marigold-400">Nuts</span>
-            </a>
-            <p class="mt-4 text-sm leading-relaxed">
-                Making Indian weddings grander, simpler, and budget-friendly. The one-stop destination for all your wedding needs.
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h2
+                class="text-3xl md:text-4xl font-serif font-bold text-white mb-6"
+            >
+                Ready to Plan the Perfect Wedding?
+            </h2>
+            <p class="text-royalPink-100 mb-8 text-lg">
+                Join thousands of couples finding trusted vendors every day.
             </p>
-            <div class="flex space-x-4 mt-6">
-                <a href="#" class="text-gray-400 hover:text-marigold-400 transition transform hover:scale-110"><Instagram size={20} /></a>
-                <a href="#" class="text-gray-400 hover:text-red-500 transition transform hover:scale-110"><Youtube size={24} /></a>
-                <a href="#" class="text-gray-400 hover:text-blue-500 transition transform hover:scale-110"><Facebook size={20} /></a>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                    class="bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2"
+                >
+                    Find Vendors Now <ArrowUpRight size={18} />
+                </button>
+                <button
+                    class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-royalPink-900 transition transform hover:-translate-y-1 active:scale-95"
+                >
+                    List Your Business
+                </button>
             </div>
         </div>
+    </section>
 
-        <div>
-            <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Services</h4>
-            <ul class="space-y-2 text-sm">
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">Venues & Lawns</a></li>
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">Catering</a></li>
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">Photography</a></li>
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">Makeup Artists</a></li>
-            </ul>
-        </div>
+    <!-- Main Footer -->
+    <footer
+        class="bg-gray-900 text-gray-400 py-12 border-t border-gray-800 shrink-0"
+    >
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8"
+        >
+            <div class="col-span-1 md:col-span-1">
+                <a
+                    href="#"
+                    class="text-2xl font-serif font-bold text-white tracking-wide block mb-4"
+                >
+                    Wedding<span class="text-marigold-400">Nuts</span>
+                </a>
+                <p class="mt-4 text-sm leading-relaxed">
+                    Making Indian weddings grander, simpler, and
+                    budget-friendly. The one-stop destination for all your
+                    wedding needs.
+                </p>
+                <div class="flex space-x-4 mt-6">
+                    <a
+                        href="#"
+                        class="text-gray-400 hover:text-marigold-400 transition transform hover:scale-110"
+                        ><Instagram size={20} /></a
+                    >
+                    <a
+                        href="#"
+                        class="text-gray-400 hover:text-red-500 transition transform hover:scale-110"
+                        ><Youtube size={24} /></a
+                    >
+                    <a
+                        href="#"
+                        class="text-gray-400 hover:text-blue-500 transition transform hover:scale-110"
+                        ><Facebook size={20} /></a
+                    >
+                </div>
+            </div>
 
-        <div>
-            <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Company</h4>
-            <ul class="space-y-2 text-sm">
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">About Us</a></li>
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">Careers</a></li>
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">Vendor Partner Program</a></li>
-                <li><a href="#" class="hover:text-white transition hover:translate-x-1 inline-block">Contact Us</a></li>
-            </ul>
-        </div>
+            <div>
+                <h4
+                    class="text-white font-bold mb-4 uppercase text-sm tracking-wider"
+                >
+                    Services
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >Venues & Lawns</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >Catering</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >Photography</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >Makeup Artists</a
+                        >
+                    </li>
+                </ul>
+            </div>
 
-        <div>
-            <h4 class="text-white font-bold mb-4 uppercase text-sm tracking-wider">Contact</h4>
-            <ul class="space-y-3 text-sm">
-                <li class="flex items-center"><Mail size={16} className="mr-2 text-gray-500" /> hello@weddingnuts.com</li>
-                <li class="flex items-center"><Phone size={16} className="mr-2 text-gray-500" /> +91 98765 43210</li>
-                <li class="mt-4 pt-4 border-t border-gray-800">
-                    <span class="block text-xs uppercase text-gray-500 mb-1">Parent Company</span>
-                    <span class="text-white font-bold">PCM Media</span>
-                </li>
-            </ul>
+            <div>
+                <h4
+                    class="text-white font-bold mb-4 uppercase text-sm tracking-wider"
+                >
+                    Company
+                </h4>
+                <ul class="space-y-2 text-sm">
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >About Us</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >Careers</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >Vendor Partner Program</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            class="hover:text-white transition hover:translate-x-1 inline-block"
+                            >Contact Us</a
+                        >
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4
+                    class="text-white font-bold mb-4 uppercase text-sm tracking-wider"
+                >
+                    Contact
+                </h4>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-center">
+                        <Mail size={16} className="mr-2 text-gray-500" /> hello@weddingnuts.com
+                    </li>
+                    <li class="flex items-center">
+                        <Phone size={16} className="mr-2 text-gray-500" /> +91 98765
+                        43210
+                    </li>
+                    <li class="mt-4 pt-4 border-t border-gray-800">
+                        <span class="block text-xs uppercase text-gray-500 mb-1"
+                            >Parent Company</span
+                        >
+                        <span class="text-white font-bold">PCM Media</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-800 text-sm text-center">
-        &copy; 2025 WeddingNuts. All rights reserved.
-    </div>
-</footer>
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-800 text-sm text-center"
+        >
+            &copy; 2025 WeddingNuts. All rights reserved.
+        </div>
+    </footer>
+</div>
