@@ -74,5 +74,74 @@
                 "duration": 7
             }
         ]
+    },
+    "testimonials": {
+        "videoTestimonials": [
+            {
+                "type": "asset",
+                "src": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "title": "Aditya & Sneha's Royal Jaipur Wedding",
+                "location": "Jaipur, Rajasthan"
+            },
+            {
+                "type": "asset",
+                "src": "https://images.unsplash.com/photo-1621621667797-e06afc217fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "title": "Budget Decor Hacks We Loved!",
+                "location": "Delhi NCR"
+            },
+            {
+                "type": "asset",
+                "src": "https://images.unsplash.com/photo-1605389669528-7634d0b43170?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "title": "Finding the Perfect Caterer",
+                "location": "Mumbai"
+            },
+            {
+                "type": "url",
+                "src": "https://www.pexels.com/download/video/3122106/",
+                "thumbnail": "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "title": "Destination Wedding in Goa",
+                "location": "Goa"
+            },
+            {
+                "type": "youtube",
+                "src": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                "title": "Our Dream Wedding Journey",
+                "location": "Udaipur"
+            },
+            {
+                "type": "instagram",
+                "src": "https://www.instagram.com/p/placeholder",
+                "thumbnail": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "title": "Sangeet Night Vibes",
+                "location": "Bangalore"
+            }
+        ],
+        "textTestimonials": [
+            {
+                "text": "We were so worried about hidden costs with caterers. WeddingNuts gave us 3 verified options in Delhi, and we saved almost 20% compared to other quotes. The food was amazing!",
+                "author": "Rahul & Priya",
+                "subtitle": "Married Dec 2025"
+            },
+            {
+                "text": "The verified vendor list was a lifesaver. We found our photographer and decor team within a week. Highly recommended for anyone planning an Indian wedding.",
+                "author": "Amit & Meera",
+                "subtitle": "Married Jan 2026"
+            },
+            {
+                "text": "I loved the transparency. No running around, just good options that fit our budget. The support team was also very helpful.",
+                "author": "Sanya & Rohan",
+                "subtitle": "Married Nov 2025"
+            },
+            {
+                "text": "We were worried about managing 500 guests, but WeddingNuts made it look effortless. Every logistical detail was handled perfectly.",
+                "author": "Rahul & Simran",
+                "subtitle": "Bangalore, Dec 2024"
+            },
+            {
+                "text": "The decor was exactly what I dreamed of. They took my Pinterest board and brought it to life! Highly recommend their design team.",
+                "author": "Meera K.",
+                "subtitle": "Udaipur, Jan 2025"
+            }
+        ]
     }
 }
