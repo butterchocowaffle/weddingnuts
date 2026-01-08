@@ -57,7 +57,7 @@ const { videoTestimonials, textTestimonials } = testimonials;
         <div class="flex overflow-x-auto gap-6 pb-8 hide-scroll snap-x">
             {
                 videoTestimonials.map((testimonial, index) => (
-                    <div class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-9/16 group cursor-pointer snap-center transform transition-transform hover:-translate-y-2 isolate will-change-transform z-0">
+                    <div class="min-w-[280px] md:min-w-[320px] bg-black rounded-xl overflow-hidden shadow-lg relative aspect-9/16 group cursor-pointer snap-center transition-all duration-300 hover:shadow-2xl hover:shadow-marigold-500/20 hover:border-marigold-500/30 border border-transparent z-0">
                         {/* Render Content Based on Type */}
                         {testimonial.type === "url" ||
                         testimonial.type === "asset" ? (
@@ -68,7 +68,7 @@ const { videoTestimonials, textTestimonials } = testimonials;
                                             ? testimonial.src
                                             : testimonial.thumbnail
                                     }
-                                    class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition duration-500"
+                                    class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105"
                                     alt={testimonial.title}
                                 />
                                 <div class="absolute inset-0 flex items-center justify-center">

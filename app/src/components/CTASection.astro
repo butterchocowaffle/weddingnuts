@@ -38,26 +38,81 @@ const { cta } = landingContent;
             >
             </div>
         </div>
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <h2
-                class="text-3xl md:text-4xl font-serif font-bold text-white mb-6"
+        <div class="max-w-6xl mx-auto relative z-10 px-6">
+            <div class="text-center mb-10">
+                <h2
+                    class="text-3xl md:text-5xl font-serif font-bold text-white mb-4"
+                >
+                    Ready to Plan the Perfect Wedding?
+                </h2>
+                <p class="text-royalPink-100 text-lg max-w-2xl mx-auto">
+                    Join thousands of couples finding trusted vendors every day.
+                </p>
+            </div>
+
+            <div
+                class="flex flex-col md:flex-row gap-8 items-stretch justify-between"
             >
-                Ready to Plan the Perfect Wedding?
-            </h2>
-            <p class="text-royalPink-100 mb-8 text-lg">
-                Join thousands of couples finding trusted vendors every day.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                    class="bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2"
+                <!-- Left: Contact Form -->
+                <div
+                    class="w-full md:w-3/5 bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-2xl border border-white/20 shadow-2xl"
                 >
-                    Find Vendors Now <ArrowUpRight size={18} />
-                </button>
-                <button
-                    class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-royalPink-900 transition transform hover:-translate-y-1 active:scale-95"
-                >
-                    List Your Business
-                </button>
+                    <h3 class="text-2xl font-serif text-white mb-6">
+                        Get in Touch
+                    </h3>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input
+                                type="text"
+                                placeholder="Your Name"
+                                class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-marigold-400 transition"
+                            />
+                            <input
+                                type="tel"
+                                placeholder="Phone Number"
+                                class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-marigold-400 transition"
+                            />
+                        </div>
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-marigold-400 transition"
+                        />
+                        <textarea
+                            rows="3"
+                            placeholder="Tell us about your dream wedding..."
+                            class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/60 focus:outline-none focus:border-marigold-400 transition"
+                        ></textarea>
+                        <button
+                            type="button"
+                            class="w-full md:hidden bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1 active:scale-95"
+                            >Send Message</button
+                        >
+                    </form>
+                </div>
+
+                <!-- Right: Buttons -->
+                <div class="w-full md:w-2/5 flex flex-col gap-4 justify-center">
+                    <button
+                        class="hidden md:flex bg-marigold-500 hover:bg-marigold-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-1 hover:shadow-2xl active:scale-95 items-center justify-center gap-3 text-lg"
+                    >
+                        Send Message <ArrowUpRight size={20} />
+                    </button>
+
+                    <div class="h-px bg-white/20 w-full my-2 hidden md:block">
+                    </div>
+
+                    <button
+                        class="bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-bold py-4 px-8 rounded-xl hover:bg-white hover:text-royalPink-900 transition transform hover:-translate-y-1 active:scale-95"
+                    >
+                        Find Vendors Now
+                    </button>
+                    <button
+                        class="bg-transparent border-2 border-white/30 text-white font-bold py-4 px-8 rounded-xl hover:bg-white hover:text-royalPink-900 transition transform hover:-translate-y-1 active:scale-95"
+                    >
+                        List Your Business
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -74,7 +129,7 @@ const { cta } = landingContent;
             let currentVideoIndex = -1;
             let isSwitching = false;
 
-            const playVideoToCheck = async (videoEl) => {
+            const playVideoToCheck = async (videoEl: HTMLVideoElement) => {
                 try {
                     if (videoEl.readyState < 2) {
                         await new Promise((resolve) => {
@@ -100,27 +155,39 @@ const { cta } = landingContent;
 
                 while (attempts < videos.length && !foundPlayable) {
                     const nextContainer = videoContainers[nextIndex];
-                    const nextVideo = videos[nextIndex];
-                    nextVideo.currentTime = 0;
+                    const nextVideo = videos[nextIndex] as HTMLVideoElement;
+                    if (nextVideo) {
+                        nextVideo.currentTime = 0;
 
-                    const isPlaying = await playVideoToCheck(nextVideo);
+                        const isPlaying = await playVideoToCheck(nextVideo);
 
-                    if (isPlaying) {
-                        if (currentVideoIndex >= 0) {
-                            const currentContainer =
-                                videoContainers[currentVideoIndex];
-                            currentContainer.classList.remove("opacity-100");
-                            currentContainer.classList.add("opacity-0");
-                            const oldVideo = videos[currentVideoIndex];
-                            setTimeout(() => {
-                                oldVideo.pause();
-                            }, 1000);
+                        if (isPlaying) {
+                            if (currentVideoIndex >= 0) {
+                                const currentContainer =
+                                    videoContainers[currentVideoIndex];
+                                currentContainer.classList.remove(
+                                    "opacity-100",
+                                );
+                                currentContainer.classList.add("opacity-0");
+                                const oldVideo = videos[
+                                    currentVideoIndex
+                                ] as HTMLVideoElement;
+                                if (oldVideo) {
+                                    setTimeout(() => {
+                                        oldVideo.pause();
+                                    }, 1000);
+                                }
+                            }
+
+                            nextContainer.classList.remove("opacity-0");
+                            nextContainer.classList.add("opacity-100");
+                            currentVideoIndex = nextIndex;
+                            foundPlayable = true;
+                        } else {
+                            nextIndex =
+                                (nextIndex + 1) % videoContainers.length;
+                            attempts++;
                         }
-
-                        nextContainer.classList.remove("opacity-0");
-                        nextContainer.classList.add("opacity-100");
-                        currentVideoIndex = nextIndex;
-                        foundPlayable = true;
                     } else {
                         nextIndex = (nextIndex + 1) % videoContainers.length;
                         attempts++;
@@ -131,12 +198,15 @@ const { cta } = landingContent;
 
             if (videos.length > 0) {
                 videos.forEach((video, idx) => {
-                    video.removeAttribute("loop");
-                    video.onended = () => {
-                        if (idx === currentVideoIndex && !isSwitching) {
-                            switchVideo();
-                        }
-                    };
+                    const v = video as HTMLVideoElement;
+                    if (v) {
+                        v.removeAttribute("loop");
+                        v.onended = () => {
+                            if (idx === currentVideoIndex && !isSwitching) {
+                                switchVideo();
+                            }
+                        };
+                    }
                 });
                 // Observer to play only when in view
                 const observer = new IntersectionObserver(

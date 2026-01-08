@@ -8,7 +8,15 @@ import {
     HeartHandshake,
 } from "lucide-react";
 import SpotlightCard from "./SpotlightCard";
-import videoSrc from "../assets/Holi_Colors_Splash_Background_Video.mp4";
+import defaultVideoSrc from "../assets/Holi_Colors_Splash_Background_Video.mp4";
+import landingContent from "../data/landing-content.json";
+
+const { whyUs } = landingContent;
+const initialVideoSrc =
+    whyUs?.initialVideo === "default" ? defaultVideoSrc : whyUs?.initialVideo;
+const loopVideoSrc = whyUs?.loopVideo;
+const showVideo = whyUs?.showBackgroundVideo !== false; // Default to true if undefined
+const backgroundColor = whyUs?.backgroundColor || "#ffffff";
 ---
 
 <section
@@ -16,25 +24,42 @@ import videoSrc from "../assets/Holi_Colors_Splash_Background_Video.mp4";
     id="why-us-section"
 >
     <!-- Background Container -->
-    <div class="absolute inset-0 z-0">
+    <div
+        class="absolute inset-0 z-0"
+        style={!showVideo ? `background-color: ${backgroundColor};` : ""}
+    >
         <!-- Video Layer -->
-        <div
-            id="video-container"
-            class="absolute inset-0 transition-opacity duration-1000 opacity-100"
-        >
-            <video
-                id="why-us-video"
-                class="w-full h-full object-cover opacity-80"
-                muted
-                playsinline
-                preload="auto"
-            >
-                <source src={videoSrc} type="video/mp4" />
-            </video>
-        </div>
+        {
+            showVideo && (
+                <div
+                    id="video-container"
+                    class="absolute inset-0 transition-opacity duration-1000 opacity-100"
+                >
+                    <!-- Loop Video (Behind, Preloaded) -->
+                    <video
+                        id="why-us-video-loop"
+                        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
+                        muted
+                        loop
+                        playsinline
+                        preload="auto"
+                    >
+                        <source src={loopVideoSrc} type="video/mp4" />
+                    </video>
 
-        <!-- White Background Layer (Revealed when video fades) -->
-        <div class="absolute inset-0 bg-white -z-10"></div>
+                    <!-- Intro Video (Front) -->
+                    <video
+                        id="why-us-video-intro"
+                        class="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity duration-1000"
+                        muted
+                        playsinline
+                        preload="auto"
+                    >
+                        <source src={initialVideoSrc} type="video/mp4" />
+                    </video>
+                </div>
+            )
+        }
     </div>
 
     <div
@@ -200,34 +225,40 @@ import videoSrc from "../assets/Holi_Colors_Splash_Background_Video.mp4";
 
 <script>
     const section = document.getElementById("why-us-section");
-    const video = document.getElementById("why-us-video") as HTMLVideoElement;
-    const videoContainer = document.getElementById("video-container");
+    const videoIntro = document.getElementById(
+        "why-us-video-intro",
+    ) as HTMLVideoElement;
+    const videoLoop = document.getElementById(
+        "why-us-video-loop",
+    ) as HTMLVideoElement;
     const content = document.getElementById("why-us-content");
     const cards = document.querySelectorAll(".why-us-card");
 
     let hasPlayed = false;
 
-    if (section && video && content) {
+    if (section && content) {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting && !hasPlayed) {
                         hasPlayed = true;
 
-                        video
-                            .play()
-                            .catch((e) =>
-                                console.error("Video play failed:", e),
-                            );
+                        if (videoIntro) {
+                             videoIntro
+                                .play()
+                                .catch((e) =>
+                                    console.error("Intro video play failed:", e),
+                                );
+                        }
 
-                        // 3s delay for CONTENT
+                        // 1s delay for CONTENT
                         setTimeout(() => {
                             content.classList.remove("opacity-0");
                             content.classList.add("opacity-100");
                             cards.forEach((card) =>
                                 card.classList.add("anim-fade-up"),
                             );
-                        }, 3000);
+                        }, 1000);
                     }
                 });
             },
@@ -235,13 +266,24 @@ import videoSrc from "../assets/Holi_Colors_Splash_Background_Video.mp4";
         );
         observer.observe(section);
 
-        // Video End Logic
-        video.addEventListener("ended", () => {
-            // Fade out video
-            if (videoContainer) {
-                videoContainer.classList.add("opacity-0");
-            }
-        });
+        // Transition Logic
+        if (videoIntro && videoLoop) {
+            videoIntro.addEventListener("ended", () => {
+                // Start playing loop video (it's behind intro)
+                videoLoop
+                    .play()
+                    .then(() => {
+                        // Fade in the loop video (bring opacity to 50% or whatever desired)
+                        videoLoop.classList.remove("opacity-0");
+                        videoLoop.classList.add("opacity-50");
+
+                        // Fade out the intro video
+                        videoIntro.classList.remove("opacity-50");
+                        videoIntro.classList.add("opacity-0");
+                    })
+                    .catch((e) => console.error("Loop video play failed:", e));
+            });
+        }
     }
 </script>
 

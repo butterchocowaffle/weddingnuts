@@ -10,9 +10,6 @@
             },
             {
                 "data": "https://www.pexels.com/download/video/11122340/"
-            },
-            {
-                "data": "https://www.pexels.com/download/video/7685293/"
             }
         ],
         "texts": [
@@ -56,16 +53,7 @@
     },
     "testimonials": {
         "backgroundVideos": [
-            "https://www.pexels.com/download/video/854947/",
-            "https://www.pexels.com/download/video/7238857/",
-            "https://www.pexels.com/download/video/984621/",
-            "https://www.pexels.com/download/video/3422958/",
-            "https://www.pexels.com/download/video/8343767/",
-            "https://www.pexels.com/download/video/3930080/",
-            "https://www.pexels.com/download/video/855142/",
-            "https://www.pexels.com/download/video/1689826/",
-            "https://www.pexels.com/download/video/8114596/",
-            "https://www.pexels.com/download/video/1387951/"
+            "https://www.pexels.com/download/video/854947/"
         ],
         "videoTestimonials": [
             {
@@ -137,14 +125,18 @@
     },
     "services": {
         "backgroundVideos": [
-            "https://www.pexels.com/download/video/4124198/",
             "https://www.pexels.com/download/video/4174213/"
         ]
     },
     "cta": {
         "backgroundVideos": [
-            "https://www.pexels.com/download/video/3122106/",
-            "https://www.pexels.com/download/video/8776123/"
+            "https://www.pexels.com/download/video/3122106/"
         ]
+    },
+    "whyUs": {
+        "initialVideo": "default",
+        "loopVideo": "https://www.pexels.com/download/video/3172307/",
+        "showBackgroundVideo": true,
+        "backgroundColor": "#ffd9d9"
     }
 }
