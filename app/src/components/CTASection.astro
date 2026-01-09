@@ -265,32 +265,56 @@ const { cta } = landingContent;
             };
 
             if (videos.length > 0) {
-                videos.forEach((video, idx) => {
-                    const v = video as HTMLVideoElement;
-                    if (v) {
-                        v.removeAttribute("loop");
-                        v.onended = () => {
-                            if (idx === currentVideoIndex && !isSwitching) {
-                                switchVideo();
-                            }
-                        };
+                // If only one video, let it loop forever
+                if (videos.length === 1) {
+                    const singleVideo = videos[0] as HTMLVideoElement;
+                    if (singleVideo) {
+                        singleVideo.setAttribute("loop", "");
+                        // Start playing when in view
+                        const observer = new IntersectionObserver(
+                            (entries) => {
+                                entries.forEach((entry) => {
+                                    if (entry.isIntersecting) {
+                                        videoContainers[0].classList.add(
+                                            "opacity-100",
+                                        );
+                                        singleVideo.play().catch(() => {});
+                                    }
+                                });
+                            },
+                            { threshold: 0.1 },
+                        );
+                        observer.observe(section);
                     }
-                });
-                // Observer to play only when in view
-                const observer = new IntersectionObserver(
-                    (entries) => {
-                        entries.forEach((entry) => {
-                            if (
-                                entry.isIntersecting &&
-                                currentVideoIndex === -1
-                            ) {
-                                switchVideo();
-                            }
-                        });
-                    },
-                    { threshold: 0.1 },
-                );
-                observer.observe(section);
+                } else {
+                    // Multiple videos - cycle through them infinitely
+                    videos.forEach((video, idx) => {
+                        const v = video as HTMLVideoElement;
+                        if (v) {
+                            v.removeAttribute("loop");
+                            v.onended = () => {
+                                if (idx === currentVideoIndex && !isSwitching) {
+                                    switchVideo();
+                                }
+                            };
+                        }
+                    });
+                    // Observer to play only when in view
+                    const observer = new IntersectionObserver(
+                        (entries) => {
+                            entries.forEach((entry) => {
+                                if (
+                                    entry.isIntersecting &&
+                                    currentVideoIndex === -1
+                                ) {
+                                    switchVideo();
+                                }
+                            });
+                        },
+                        { threshold: 0.1 },
+                    );
+                    observer.observe(section);
+                }
             }
         }
     </script>
